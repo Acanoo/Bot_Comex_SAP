@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Activity mc:Ignorable="sap sap2010 sads" x:Class="Main" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Sequence DisplayName="Main">
+    <ui:LogMessage DisplayName="Inicio del proceso" Level="Info" Message="[INFO] Inicio del proceso" />
+    <ui:InvokeWorkflowFile DisplayName="InitConfig" WorkflowFileName="Workflows/InitConfig.xaml" />
+    <ui:InvokeWorkflowFile DisplayName="GetSAPCredentials" WorkflowFileName="Workflows/GetSAPCredentials.xaml" />
+    <ui:InvokeWorkflowFile DisplayName="OpenSAP" WorkflowFileName="Workflows/OpenSAP.xaml" />
+    <ui:InvokeWorkflowFile DisplayName="LoginSAP" WorkflowFileName="Workflows/LoginSAP.xaml" />
+    <ui:InvokeWorkflowFile DisplayName="ValidateLogin" WorkflowFileName="Workflows/ValidateLogin.xaml" />
+    <ui:InvokeWorkflowFile DisplayName="ProcesosPosterioresSAP" WorkflowFileName="Workflows/ProcesosPosterioresSAP.xaml" />
+    <ui:LogMessage DisplayName="Proceso listo" Level="Info" Message="[INFO] Proceso listo para continuar con siguientes workflows" />
+  </Sequence>
+</Activity>

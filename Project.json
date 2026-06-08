@@ -1,0 +1,10 @@
+{
+  "name": "SAPBusinessOneLoginBot",
+  "description": "Bot independiente para login en SAP Business One con arquitectura modular.",
+  "main": "Workflows/Main.xaml",
+  "schemaVersion": "7.0",
+  "dependencies": {
+    "UiPath.System.Activities": "[23.10.0]",
+    "UiPath.UIAutomation.Activities": "[23.10.0]"
+  }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Activity mc:Ignorable="sap sap2010 sads" x:Class="InitConfig" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Sequence DisplayName="InitConfig">
+    <ui:TryCatch DisplayName="Try Catch InitConfig">
+      <ui:TryCatch.Try>
+        <Sequence>
+          <ui:Assign DisplayName="Set SAPExecutablePath" To="[String]strSAPExecutablePath" Value="@"C:\\Program Files (x86)\\SAP\\SAP Business One\\SAP Business One.exe"" />
+          <ui:Assign DisplayName="Set SAPCompanyName" To="[String]strSAPCompanyName" Value="Megapaca GT" />
+          <ui:Assign DisplayName="Set LoginTimeout" To="[Int32]intLoginTimeout" Value="120000" />
+          <ui:Assign DisplayName="Set ScreenshotPath" To="[String]strScreenshotPath" Value="Screenshots" />
+          <ui:Assign DisplayName="Set LogPath" To="[String]strLogPath" Value="Logs" />
+          <ui:LogMessage DisplayName="Configuracion cargada" Level="Info" Message="[INFO] Configuración cargada" />
+        </Sequence>
+      </ui:TryCatch.Try>
+      <ui:TryCatch.Catches>
+        <ui:Catch x:TypeArguments="System.Exception">
+          <ui:Assign DisplayName="Handle InitConfig Error" To="[String]exceptionMessage" Value="exception.Message" />
+        </ui:Catch>
+      </ui:TryCatch.Catches>
+    </ui:TryCatch>
+  </Sequence>
+</Activity>

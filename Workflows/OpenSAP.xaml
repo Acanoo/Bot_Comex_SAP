@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Activity mc:Ignorable="sap sap2010 sads" x:Class="OpenSAP" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Sequence DisplayName="OpenSAP">
+    <ui:TryCatch DisplayName="Open SAP Try Catch">
+      <ui:TryCatch.Try>
+        <Sequence>
+          <ui:CheckAppState DisplayName="Check SAP Window" ApplicationType="Window" Selector="<wnd app='SAP Business One.exe' title='SAP Business One - Login' />" Result="isSAPOpen" />
+          <ui:If DisplayName="If SAP Open" Condition="isSAPOpen">
+            <ui:Then>
+              <ui:LogMessage DisplayName="SAP Already Open" Level="Info" Message="[INFO] SAP Business One abierto" />
+            </ui:Then>
+            <ui:Else>
+              <Sequence>
+                <ui:StartProcess DisplayName="Start SAP Business One" FileName="strSAPExecutablePath" />
+                <ui:WaitForElement DisplayName="Wait Login Window" Selector="<wnd app='SAP Business One.exe' title='SAP Business One - Login' />" TimeoutMS="120000" />
+                <ui:LogMessage DisplayName="SAP Abierto" Level="Info" Message="[INFO] SAP Business One abierto" />
+              </Sequence>
+            </ui:Else>
+          </ui:If>
+        </Sequence>
+      </ui:TryCatch.Try>
+      <ui:TryCatch.Catches>
+        <ui:Catch x:TypeArguments="System.Exception">
+          <ui:Throw DisplayName="Throw SAP Open Error" Exception="New System.Exception(&quot;SAP no abre o la ventana de login no se encuentra.&quot;)" />
+        </ui:Catch>
+      </ui:TryCatch.Catches>
+    </ui:TryCatch>
+  </Sequence>
+</Activity>

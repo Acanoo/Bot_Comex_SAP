@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Activity mc:Ignorable="sap sap2010 sads" x:Class="ValidateLogin" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Sequence DisplayName="ValidateLogin">
+    <ui:TryCatch DisplayName="Validate Login Try Catch">
+      <ui:TryCatch.Try>
+        <Sequence>
+          <ui:RetryScope DisplayName="Retry Validate SAP Main Window" NumberOfRetries="3" DelayBetweenRetries="1000">
+            <ui:RetryScope.Condition>
+              <ui:ElementExists DisplayName="Check Main Menu" Selector="<wnd title='SAP Business One' /><ctrl name='Menu' />" Result="isLoginSuccessful" />
+            </ui:RetryScope.Condition>
+            <ui:RetryScope.Action>
+              <ui:WaitForElement DisplayName="Wait Main Menu" Selector="<wnd title='SAP Business One' /><ctrl name='Menu' />" TimeoutMS="30000" />
+            </ui:RetryScope.Action>
+          </ui:RetryScope>
+          <ui:If DisplayName="If Login Successful" Condition="isLoginSuccessful">
+            <ui:Then>
+              <ui:LogMessage DisplayName="Login Exitoso" Level="Info" Message="[INFO] Login SAP Business One exitoso" />
+              <ui:TakeScreenshot DisplayName="Screenshot Login Exitoso" FileName="String.Format($"{strScreenshotPath}\{DateTime.Now:yyyyMMdd_HHmmss}_LoginSAP.png")" />
+            </ui:Then>
+            <ui:Else>
+              <Sequence>
+                <ui:TakeScreenshot DisplayName="Screenshot Login Failure" FileName="String.Format($"{strScreenshotPath}\{DateTime.Now:yyyyMMdd_HHmmss}_LoginSAP.png")" />
+                <ui:Throw DisplayName="Throw Login Validation Error" Exception="New System.Exception(&quot;Validación de login falló: no se detectó la pantalla principal de SAP.&quot;)" />
+              </Sequence>
+            </ui:Else>
+          </ui:If>
+        </Sequence>
+      </ui:TryCatch.Try>
+      <ui:TryCatch.Catches>
+        <ui:Catch x:TypeArguments="System.Exception">
+          <ui:Throw DisplayName="Throw ValidateLogin Error" Exception="New System.Exception(&quot;Error en la validación de login SAP.&quot;)" />
+        </ui:Catch>
+      </ui:TryCatch.Catches>
+    </ui:TryCatch>
+  </Sequence>
+</Activity>

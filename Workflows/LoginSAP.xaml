@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Activity mc:Ignorable="sap sap2010 sads" x:Class="LoginSAP" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Sequence DisplayName="LoginSAP">
+    <ui:TryCatch DisplayName="Login SAP Try Catch">
+      <ui:TryCatch.Try>
+        <Sequence>
+          <ui:WaitForElement DisplayName="Wait Company Field" Selector="<wnd title='SAP Business One - Login' /><ctrl name='Company' />" TimeoutMS="120000" />
+          <ui:ElementExists DisplayName="Validate Company" Selector="<wnd title='SAP Business One - Login' /><ctrl name='Company' />" Result="isCompanyVisible" />
+          <ui:GetText DisplayName="Read SAP Company Name" Selector="<wnd title='SAP Business One - Login' /><ctrl name='Company' />" Text="currentCompanyName" />
+          <ui:If DisplayName="If Correct Company" Condition="currentCompanyName.Trim() = strSAPCompanyName">
+            <ui:Then>
+              <Sequence>
+                <ui:TypeInto DisplayName="Type User" Selector="<wnd title='SAP Business One - Login' /><ctrl name='User' />" Text="strUsuarioSAP" EmptyField="True" />
+                <ui:LogMessage DisplayName="Usuario ingresado" Level="Info" Message="[INFO] Usuario ingresado" />
+                <ui:TypeSecureText DisplayName="Type Password" Selector="<wnd title='SAP Business One - Login' /><ctrl name='Password' />" SecureText="securePasswordSAP" />
+                <ui:LogMessage DisplayName="Contraseña ingresada" Level="Info" Message="[INFO] Contraseña ingresada" />
+                <ui:Click DisplayName="Click OK" Selector="<wnd title='SAP Business One - Login' /><ctrl name='OK' />" />
+                <ui:LogMessage DisplayName="Botón OK presionado" Level="Info" Message="[INFO] Botón OK presionado" />
+              </Sequence>
+            </ui:Then>
+            <ui:Else>
+              <Sequence>
+                <ui:TakeScreenshot DisplayName="Screenshot Sociedad Incorrecta" FileName="String.Format($"{strScreenshotPath}\{DateTime.Now:yyyyMMdd_HHmmss}_LoginSAP.png")" />
+                <ui:LogMessage DisplayName="Sociedad incorrecta" Level="Warn" Message="[WARN] Sociedad visible no coincide con Megapaca GT" />
+                <ui:Throw DisplayName="Throw Company Mismatch" Exception="New System.Exception(&quot;Sociedad incorrecta: no se puede continuar con el login.&quot;)" />
+              </Sequence>
+            </ui:Else>
+          </ui:If>
+        </Sequence>
+      </ui:TryCatch.Try>
+      <ui:TryCatch.Catches>
+        <ui:Catch x:TypeArguments="System.Exception">
+          <ui:TakeScreenshot DisplayName="Screenshot Login Error" FileName="String.Format($"{strScreenshotPath}\{DateTime.Now:yyyyMMdd_HHmmss}_LoginSAP.png")" />
+          <ui:Throw DisplayName="Throw Login Error" Exception="New System.Exception(&quot;Error durante el ingreso de usuario o contraseña en SAP.&quot;)" />
+        </ui:Catch>
+      </ui:TryCatch.Catches>
+    </ui:TryCatch>
+  </Sequence>
+</Activity>
